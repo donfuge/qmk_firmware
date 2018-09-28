@@ -55,6 +55,47 @@
         #define PS2_USART_RX_VECT       USART1_RX_vect
     #endif
 
+	
+	#ifdef PS2_USE_INT
+	#define PS2_CLOCK_PORT  PORTD
+	#define PS2_CLOCK_PIN   PIND
+	#define PS2_CLOCK_DDR   DDRD
+	#define PS2_CLOCK_BIT   0
+	#define PS2_DATA_PORT   PORTD
+	#define PS2_DATA_PIN    PIND
+	#define PS2_DATA_DDR    DDRD
+	#define PS2_DATA_BIT    1
+
+	#define PS2_INT_INIT()  do {    \
+		EICRA |= ((1<<ISC21) |      \
+				  (0<<ISC20));      \
+	} while (0)
+	#define PS2_INT_ON()  do {      \
+		EIMSK |= (1<<INT0);         \
+	} while (0)
+	#define PS2_INT_OFF() do {      \
+		EIMSK &= ~(1<<INT0);        \
+	} while (0)
+	#define PS2_INT_VECT   INT0_vect
+	#endif
+
+	
+	#ifdef PS2_USE_BUSYWAIT
+	#   define PS2_CLOCK_PORT  PORTD
+	#   define PS2_CLOCK_PIN   PIND
+	#   define PS2_CLOCK_DDR   DDRD
+	#   define PS2_CLOCK_BIT   0
+	#   define PS2_DATA_PORT   PORTD
+	#   define PS2_DATA_PIN    PIND
+	#   define PS2_DATA_DDR    DDRD
+	#   define PS2_DATA_BIT    1
+	#endif
+
+
+	/* To debug the mouse reports */
+	#define PS2_MOUSE_DEBUG_HID
+	#define PS2_MOUSE_DEBUG_RAW
+
     #define MATRIX_COL_PINS { F1, F4, F5 }
     #define MATRIX_ROW_PINS { F0 }
     #define UNUSED_PINS
