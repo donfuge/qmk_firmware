@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 #include "action_layer.h"
 #include "eeconfig.h"
+#include "keymap_hungarian.h"
 
 extern keymap_config_t keymap_config;
 
@@ -15,75 +16,82 @@ enum custom_keycodes {
   RAISE,
   ADJUST,
 };
+enum {
+  TD_TAB_UNDO = 0
+};
+
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
 #define KC_JPN LALT(KC_GRV)
+#define UNDO LCTL(HU_Z)
+
+	
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Qwerty
    * ,----------------------------------------------------------------------------------------------------------------------.
-   * | ESC  |   1  |   2  |   3  |   4  |   5  |   [  |                    |   ]  |   6  |   7  |   8  |   9  |   0  | Caps |
+   * |  0 |   1  |   2  |   3  |   4  |   5  |   [  |                    |   ]  |   6  |   7  |   8  |   9  |   HU_OE  | HU_UE |
    * |------+------+------+------+------+------+------+--------------------+------+------+------+------+------+------+------|
-   * |  `   |   Q  |   W  |   E  |   R  |   T  |   -  |                    |   =  |   Y  |   U  |   I  |   O  |   P  |  \   |
+   * | Tab  |   Q  |   W  |   E  |   R  |   T  |   -  |                    |   =  |   Y  |   U  |   I  |   O  |   P  |  Bksp   |
    * |------+------+------+------+------+------+------+--------------------+------+------+------+------+------+------+------|
-   * | Tab  |   A  |   S  |   D  |   F  |   G  |  Del |                    | Bksp |   H  |   J  |   K  |   L  |   ;  |  "   |
+   * | ESC  |   A  |   S  |   D  |   F  |   G  |  Del |                    | Bksp |   H  |   J  |   K  |   L  |   É  |  Á   |
    * |------+------+------+------+------+------+---------------------------+------+------+------+------+------+------+------|
-   * | Shift|   Z  |   X  |   C  |   V  |   B  |  JPN |                    | Enter|   N  |   M  |   ,  |   .  |   /  | Shift|
+   * | Shift|   Z  |   X  |   C  |   V  |   B  |  _______ |                    | Enter|   N  |   M  |   ,  |   .  |   -  | Enter|
    * |-------------+------+------+------+------+------+------+------+------+------+------+------+------+------+-------------|
-   * | Ctrl |  GUI |  ALt |Adjust|||||||| Lower| Space|      ||||||||      | Enter| Raise|||||||| Left | Down |  Up  | Right|
+   * | Ctrl |  GUI |  ALt |Adjust|||||||| Raise| Lower| Space     |||||||| Enter     | | Raise|||||||| Left | Down |  Up  | Right|
    * ,----------------------------------------------------------------------------------------------------------------------.
    */
   [_QWERTY] = LAYOUT( \
-    KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_LBRC,                        KC_RBRC, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_CAPS, \
-    KC_GRV,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_MINS,                        KC_EQL , KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS, \
-    KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_DEL ,                        KC_BSPC, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_JPN ,                        KC_ENT , KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
-    KC_LCTL, KC_LGUI, KC_LALT, ADJUST,           LOWER,   KC_SPC ,_______,        _______,KC_ENT , RAISE,            KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+    HU_0,  HU_1,    HU_2,    HU_3,    HU_4,    HU_5,    HU_LBRC,                        HU_RBRC, HU_6,    HU_7,    HU_8,    HU_9,    HU_OE,    HU_UE, \
+    KC_TAB,  HU_Q,    HU_W,    HU_E,    HU_R,    HU_T,    HU_MINS,                        HU_EQL , HU_Y,    HU_U,    HU_I,    HU_O,    HU_P,    KC_BSPC, \
+    KC_ESC,  HU_A,    HU_S,    HU_D,    HU_F,    HU_G,    KC_DEL ,                        KC_BSPC, HU_H,    HU_J,    HU_K,    HU_L,    HU_EE, HU_AA, \
+    KC_LSFT, HU_Z,    HU_X,    HU_C,    HU_V,    HU_B,    _______ ,                        KC_ENT , HU_N,    HU_M,    HU_COMM, HU_DOT,  HU_MINS, KC_ENT, \
+    KC_LCTL, KC_LGUI, KC_LALT, ADJUST,     RAISE,      LOWER,  KC_SPC,        KC_ENT,LOWER , RAISE,            KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
   ),
 
   /* Lower
    * ,----------------------------------------------------------------------------------------------------------------------.
-   * |  F11 |  F1  |  F2  |  F3  |  F4  |  F5  |   {  |                    |   }  |  F6  |  F7  |  F8  |  F9  |  F10 |  F12 |
+   * |  F12 |  F1  |  F2  |  F3  |  F4  |  F5  |   {  |                    |   }  |  F6  |  F7  |  F8  |  F9  |  F10 |  F11 |
    * |------+------+------+------+------+------+------+--------------------+------+------+------+------+------+------+------|
-   * |  ~   |   !  |   @  |   #  |   $  |   %  |   _  |                    |   +  |   ^  |   &  |   *  |   (  |   )  |  |   |
+   * |  Tab   |   !  |   @  |   #  |   $  |   %  |   _  |                    |   +  |   ^  |   &  |   *  |   (  |   )  |  |   |
    * |------+------+------+------+------+------+------+--------------------+------+------+------+------+------+------+------|
-   * | Tab  |   1  |   2  |   3  |   4  |   5  |  Del |                    | Bksp |   H  |   J  |   K  |   L  |   :  |  "   |
+   * | Undo  |   1  |   2  |   3  |   4  |   5  |  Del |                    | Bksp |   H  |   J  |   K  |   L  |   :  |  "   |
    * |------+------+------+------+------+------+---------------------------+------+------+------+------+------+------+------|
-   * | Shift|   6  |   7  |   8  |   9  |   0  |  JPN |                    | Enter|   N  |   M  |   <  |   >  |   ?  | Shift|
+   * | Shift|   6  |   7  |   8  |   9  |   0  |  _______ |                    |      |   N  |   M  |   <  |   >  |   ?  | Enter|
    * |-------------+------+------+------+------+------+------+------+------+------+------+------+------+------+-------------|
-   * | Ctrl |  GUI |  ALt |Adjust|||||||| Lower| Space|      ||||||||      | Enter| Raise|||||||| Home |PageDn|PageUp|  End |
+   * | Ctrl |  GUI |  ALt |Adjust|||||||| Raise| Lower    |      ||||||||      | Raise     | Lower|||||||| Home |PageDn|PageUp|  End |
    * ,----------------------------------------------------------------------------------------------------------------------.
    */
   [_LOWER] = LAYOUT(
-    KC_F11,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_LCBR,                        KC_RCBR, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F12,  \
-    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_UNDS,                        KC_PLUS, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
-    KC_TAB,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_DEL ,                        KC_BSPC, KC_H,    KC_J,    KC_K,    KC_L,    KC_COLN, KC_DQT , \
-    KC_LSFT, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_JPN ,                        KC_ENT , KC_N,    KC_M,    KC_LT,   KC_GT,   KC_QUES, KC_RSFT, \
-    KC_LCTL, KC_LGUI, KC_LALT, ADJUST,           LOWER,   KC_SPC ,_______,        _______,KC_ENT , RAISE,            KC_HOME, KC_PGDN, KC_PGUP, KC_END   \
+    KC_F12,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_LCBR,                        KC_RCBR, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  \
+    KC_TAB, HU_EXLM, HU_AT,   HU_HASH, HU_DLR,  HU_PERC, HU_UNDS,                        HU_PLUS, HU_CIRC, HU_AMPR, HU_ASTR, HU_LPRN, HU_RPRN, HU_PIPE, \
+    UNDO,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_DEL ,                        KC_BSPC, KC_H,    KC_J,    KC_K,    KC_L,    HU_COLN, HU_DQOT , \
+    KC_LSFT, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______ ,                        _______ , KC_N,    KC_M,    HU_LESS,   HU_MORE,   HU_QST, KC_ENT, \
+    KC_LCTL, KC_LGUI, KC_LALT, ADJUST,              RAISE ,LOWER,_______,        _______,RAISE,LOWER ,            KC_HOME, KC_PGDN, KC_PGUP, KC_END   \
   ),
 
   /* Raise
    * ,----------------------------------------------------------------------------------------------------------------------.
-   * |  F11 |  F1  |  F2  |  F3  |  F4  |  F5  |   {  |                    |   }  |  HU_UU  |  HU_II  |  HU_OEE  |  HU_UEE  |  HU_OO |  F12 |
+   * |  F11 |  F1  |  F2  |  F3  |  F4  |  F5  |   {  |                    |   }  |  .  |  HU_UU  |  HU_II  |  HU_OEE  |  HU_UEE |  HU_OO |
    * |------+------+------+------+------+------+------+--------------------+------+------+------+------+------+------+------|
-   * |  ~   |   !  |   @  |   #  |   $  |   %  |   _  |                    |   +  |   ^  |   &  |   *  |   (  |   )  |  |   |
+   * |  Tab   |   !  |   @  |   #  |   $  |   %  |   _  |                    |   +  |   .  |   HU_UU  |   HU_II  |   HU_OEE  |   HU_UEE  |  Bspace   |
    * |------+------+------+------+------+------+------+--------------------+------+------+------+------+------+------+------|
-   * | Tab  |   1  |   2  |   3  |   4  |   5  |  Del |                    | Bksp |   H  |   J  |   K  |   L  |   :  |  "   |
+   * | Undo  |   1  |   2  |   3  |   4  |   5  |  Del |                    | Bksp |   H  |   J  |   K  |   L  |   :  |  "   |
    * |------+------+------+------+------+------+---------------------------+------+------+------+------+------+------+------|
-   * | Shift|   6  |   7  |   8  |   9  |   0  |  JPN |                    | Enter|   N  |   M  |   <  |   >  |   ?  | Shift|
+   * | Shift|   6  |   7  |   8  |   9  |   0  |  _______ |                    | Enter|   N  |   M  |   <  |   >  |   ?  | Enter|
    * |-------------+------+------+------+------+------+------+------+------+------+------+------+------+------+-------------|
-   * | Ctrl |  GUI |  ALt |Adjust|||||||| Lower| Space|      ||||||||      | Enter| Raise|||||||| Home |PageDn|PageUp|  End |
+   * | Ctrl |  GUI |  ALt |Adjust|||||||| Raise |Lower | Space     ||||||||  Enter    | Raise| Lower |||||||| Home |PageDn|PageUp|  End |
    * ,----------------------------------------------------------------------------------------------------------------------.
    */
   [_RAISE] = LAYOUT(
-    KC_F11,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_LCBR,                        KC_RCBR, HU_UU,   HU_II,   HU_OEE,   HU_UEE,   HU_OO,  KC_F12,  \
-    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_UNDS,                        KC_PLUS, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
-    KC_TAB,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_DEL ,                        KC_BSPC, KC_H,    KC_J,    KC_K,    KC_L,    KC_COLN, KC_DQT , \
-    KC_LSFT, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_JPN ,                        KC_ENT , KC_N,    KC_M,    KC_LT,   KC_GT,   KC_QUES, KC_RSFT, \
-    KC_LCTL, KC_LGUI, KC_LALT, ADJUST,           LOWER,   KC_SPC ,_______,        _______,KC_ENT , RAISE,            KC_HOME, KC_PGDN, KC_PGUP, KC_END   \
+    KC_F11,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   HU_LCBR,                        HU_RCBR, HU_DOT,    HU_UU,    HU_II,    HU_OEE,    HU_UEE,    HU_OO,   \
+    KC_TAB, HU_EXLM, HU_AT,   HU_HASH, HU_DLR,  HU_PERC, HU_UNDS,                          HU_DOT,    HU_UU,    HU_II,    HU_OEE,    HU_UEE,    HU_OO, KC_BSPC,  \
+    UNDO,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_DEL ,                        KC_BSPC, KC_H,    KC_J,    KC_K,    KC_L,    KC_COLN, HU_DQOT , \
+    KC_LSFT, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______ ,                        KC_ENT , KC_N,    KC_M,    HU_LESS,   HU_MORE,   HU_QST, KC_ENT, \
+    KC_LCTL, KC_LGUI, KC_LALT, ADJUST,     RAISE,      LOWER,   KC_SPC ,        KC_ENT , RAISE,  LOWER,         KC_HOME, KC_PGDN, KC_PGUP, KC_END   \
   ),
 
   /* Adjust
