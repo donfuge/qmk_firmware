@@ -41,7 +41,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |------+------+------+------+------+------+---------------------------+------+------+------+------+------+------+------|
    * | Shift|   Z  |   X  |   C  |   V  |   B  |  _______ |                    |@ |   N  |   M  |   ,  |   .  |   -  | Enter|
    * |-------------+------+------+------+------+------+------+------+------+------+------+------+------+------+-------------|
-   * | Ctrl |  GUI |  ALt |Adjust|||||||| Raise| Lower| Space     |||||||| Enter     | Raise|Lower |||||||| Left | Down |  Up  | Right|
+   * | Ctrl |Adjust|  ALt |  GUI |||||||| Raise| Lower| Space     |||||||| Enter     | Raise|Lower |||||||| Left | Down |  Up  | Right|
    * ,----------------------------------------------------------------------------------------------------------------------.
    */
   [_QWERTY] = LAYOUT( \
@@ -49,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,  HU_Q,    HU_W,    HU_E,    HU_R,    HU_T,    HU_MINS,                        HU_EQL , HU_Z,    HU_U,    HU_I,    HU_O,    HU_P,    KC_BSPC, \
     KC_ESC,  HU_A,    HU_S,    HU_D,    HU_F,    HU_G,    KC_DEL ,                        KC_BSPC, HU_H,    HU_J,    HU_K,    HU_L,    HU_EE, HU_AA, \
     KC_LSFT, HU_Y,    HU_X,    HU_C,    HU_V,    HU_B,    _______ ,                        HU_AMPR , HU_N,    HU_M,    HU_COMM, HU_DOT,  HU_MINS, KC_ENT, \
-    KC_LCTL, KC_LGUI, KC_LALT, ADJUST,     RAISE,      LOWER,  KC_SPC,        KC_ENT,RAISE,LOWER ,            KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+    KC_LCTL, ADJUST, KC_LALT, KC_LGUI,     RAISE,      LOWER,  KC_SPC,        KC_ENT,RAISE,LOWER ,            KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
   ),
 
   /* Lower
