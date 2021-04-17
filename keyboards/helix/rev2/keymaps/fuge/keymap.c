@@ -7,9 +7,6 @@
 #ifdef AUDIO_ENABLE
   #include "audio.h"
 #endif
-#ifdef SSD1306OLED
-  #include "ssd1306.h"
-#endif
 
 #include "keymap_hungarian.h"
 
@@ -39,10 +36,7 @@ enum custom_keycodes {
   RAISE,
   ADJUST,
   BACKLIT,
-  RGBRST,
-  RGB_GREEN,
-  RGB_RED,
-  RGB_BLUE
+  RGBRST
 };
 
 enum macro_keycodes {
@@ -145,10 +139,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [_ADJUST] =  LAYOUT( \
       LALT(KC_F12),  LALT(KC_F1), LALT(KC_F2),   LALT(KC_F3),   LALT(KC_F4),   LALT(KC_F5),                      LALT(KC_F6),  LALT(KC_F7),   LALT(KC_F8),   LALT(KC_F9),   LALT(KC_F10),  LALT(KC_F11),   \
-      _______, RESET,   RGBRST,  RGB_RED, RGB_GREEN, RGB_BLUE,                   _______, _______, _______, _______, _______, KC_DEL, \
+      _______, RESET,   RGBRST,  _______, _______, _______,                   _______, _______, _______, _______, _______, KC_DEL, \
       _______, _______, _______, AU_ON,   AU_OFF,  AG_NORM,                   AG_SWAP, QWERTY,  _______, _______,  _______, _______, \
       _______, _______, _______, _______, _______, _______, HU_LCBR, HU_RCBR, _______, _______, RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, \
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SMOD,RGB_HUD, RGB_SAD, RGB_VAD \
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_MOD,RGB_HUD, RGB_SAD, RGB_VAD \
       )
 
 };
@@ -208,7 +202,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         } else {
           TOG_STATUS = !TOG_STATUS;
           #ifdef RGBLIGHT_ENABLE
-            //rgblight_mode(16);
+            //rgblight_mode(RGBLIGHT_MODE_SNAKE + 1);
           #endif
         }
         layer_on(_LOWER);
@@ -231,7 +225,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         } else {
           TOG_STATUS = !TOG_STATUS;
           #ifdef RGBLIGHT_ENABLE
-            //rgblight_mode(15);
+            //rgblight_mode(RGBLIGHT_MODE_SNAKE);
           #endif
         }
         layer_on(_RAISE);
@@ -260,7 +254,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
           rgblight_mode(RGB_current_mode);
           rgblight_step();
-          RGB_current_mode = rgblight_config.mode;
+          RGB_current_mode = rgblight_get_mode();
         }
       #endif
       return false;
@@ -278,19 +272,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+
+#ifdef SSD1306OLED
+  #include "ssd1306.h"
+#endif
+
 void matrix_init_user(void) {
     #ifdef AUDIO_ENABLE
         startup_user();
     #endif
     #ifdef RGBLIGHT_ENABLE
-      RGB_current_mode = rgblight_config.mode;
+      RGB_current_mode = rgblight_get_mode();
     #endif
     //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
     #ifdef SSD1306OLED
         iota_gfx_init(!has_usb());   // turns on the display
     #endif
 }
-
 
 #ifdef AUDIO_ENABLE
 
@@ -320,7 +318,6 @@ void music_scale_user(void)
 
 //SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
 #ifdef SSD1306OLED
-
 // hook point for 'led_test' keymap
 //   'default' keymap's led_test_init() is empty function, do nothing
 //   'led_test' keymap's led_test_init() force rgblight_mode_noeeprom(35);
@@ -340,12 +337,6 @@ void matrix_update(struct CharacterMatrix *dest,
   }
 }
 
-//assign the right code to your layers for OLED display
-#define L_BASE 0
-#define L_LOWER (1<<_LOWER)
-#define L_RAISE (1<<_RAISE)
-#define L_ADJUST (1<<_ADJUST)
-#define L_ADJUST_TRI (L_ADJUST|L_RAISE|L_LOWER)
 
 static void render_logo(struct CharacterMatrix *matrix) {
 
@@ -415,13 +406,13 @@ void iota_gfx_task_user(void) {
   }
 #endif
 
-  matrix_clear(&matrix);
-  if(is_master){
-    render_status(&matrix);
-  }else{
-    render_logo(&matrix);
-  }
-  matrix_update(&display, &matrix);
-}
+  // matrix_clear(&matrix);
+  // if(is_master){
+    // render_status(&matrix);
+  // }else{
+    // render_logo(&matrix);
+  // }
+  // matrix_update(&display, &matrix);
+// }
 
 #endif
